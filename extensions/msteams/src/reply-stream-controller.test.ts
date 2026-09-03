@@ -554,6 +554,7 @@ describe("createTeamsReplyStreamController", () => {
           streaming: {
             mode: "progress",
             progress: {
+              toolProgress: true,
               label: "Working",
               maxLines: 3,
             },
@@ -581,7 +582,7 @@ describe("createTeamsReplyStreamController", () => {
       context: makeContext(stream),
       feedbackLoopEnabled: false,
       msteamsConfig: {
-        streaming: { mode: "progress", progress: { label: false } },
+        streaming: { mode: "progress", progress: { toolProgress: true, label: false } },
       } as never,
     });
 
@@ -610,7 +611,7 @@ describe("createTeamsReplyStreamController", () => {
         feedbackLoopEnabled: false,
         log: { debug: vi.fn() } as never,
         msteamsConfig: {
-          streaming: { mode: "progress", progress: { label: "Working" } },
+          streaming: { mode: "progress", progress: { toolProgress: true, label: "Working" } },
         } as never,
       });
 
@@ -636,7 +637,7 @@ describe("createTeamsReplyStreamController", () => {
       conversationType: "personal",
       context: makeContext(stream),
       feedbackLoopEnabled: false,
-      msteamsConfig: { streaming: { mode: "progress" } } as never,
+      msteamsConfig: { streaming: { mode: "progress", progress: { toolProgress: true } } } as never,
     });
 
     expect(ctrl.preparePayload({ text: "complete final answer" })).toBeUndefined();
@@ -650,7 +651,7 @@ describe("createTeamsReplyStreamController", () => {
       conversationType: "personal",
       context: makeContext(stream),
       feedbackLoopEnabled: false,
-      msteamsConfig: { streaming: { mode: "progress" } } as never,
+      msteamsConfig: { streaming: { mode: "progress", progress: { toolProgress: true } } } as never,
     });
 
     expect(ctrl.preparePayload({ text: "complete final answer" })).toBeUndefined();
@@ -670,7 +671,7 @@ describe("createTeamsReplyStreamController", () => {
       context: makeContext(stream),
       feedbackLoopEnabled: false,
       log: { debug: vi.fn() } as never,
-      msteamsConfig: { streaming: { mode: "progress" } } as never,
+      msteamsConfig: { streaming: { mode: "progress", progress: { toolProgress: true } } } as never,
     });
 
     expect(ctrl.preparePayload({ text: "complete final answer" })).toEqual({
@@ -717,7 +718,9 @@ describe("createTeamsReplyStreamController", () => {
         conversationType: "personal",
         context: makeContext(stream),
         feedbackLoopEnabled: false,
-        msteamsConfig: { streaming: { mode: "progress" } } as never,
+        msteamsConfig: {
+          streaming: { mode: "progress", progress: { toolProgress: true } },
+        } as never,
       });
       await expect(ctrl.noteProgressWork({ toolName: "exec" })).resolves.toBeUndefined();
     });

@@ -260,7 +260,9 @@ describe("createMSTeamsReplyDispatcher", () => {
 
   it("sends an informative status update once work expands in personal chats", async () => {
     vi.useFakeTimers();
-    const dispatcher = createDispatcher("personal", { streaming: { mode: "progress" } });
+    const dispatcher = createDispatcher("personal", {
+      streaming: { mode: "progress", progress: { toolProgress: true } },
+    });
     const options = dispatcherOptions();
 
     // onReplyStart renders the initial informative line. Tool/item events
@@ -409,7 +411,9 @@ describe("createMSTeamsReplyDispatcher", () => {
   });
 
   it("delays the informative status update until the progress-draft gate fires", async () => {
-    const dispatcher = createDispatcher("personal", { streaming: { mode: "progress" } });
+    const dispatcher = createDispatcher("personal", {
+      streaming: { mode: "progress", progress: { toolProgress: true } },
+    });
     const stream = getStreamMock();
 
     // The progress-draft gate (createChannelProgressDraftGate) gates updates
@@ -443,7 +447,7 @@ describe("createMSTeamsReplyDispatcher", () => {
 
     vi.useFakeTimers();
     const progressDispatcher = createDispatcher("personal", {
-      streaming: { mode: "progress" },
+      streaming: { mode: "progress", progress: { toolProgress: true } },
     });
     await progressDispatcher.replyOptions.onToolStart?.({ name: "exec" });
     await vi.advanceTimersByTimeAsync(5_000);
@@ -582,6 +586,7 @@ describe("createMSTeamsReplyDispatcher", () => {
       streaming: {
         mode: "progress",
         progress: {
+          toolProgress: true,
           label: "Working",
         },
       },
@@ -604,6 +609,7 @@ describe("createMSTeamsReplyDispatcher", () => {
       streaming: {
         mode: "progress",
         progress: {
+          toolProgress: true,
           label: "Working",
           commandText: "raw",
         },
@@ -637,6 +643,7 @@ describe("createMSTeamsReplyDispatcher", () => {
       streaming: {
         mode: "progress",
         progress: {
+          toolProgress: true,
           label: "Working",
           commandText: "raw",
         },
@@ -662,6 +669,7 @@ describe("createMSTeamsReplyDispatcher", () => {
       streaming: {
         mode: "progress",
         progress: {
+          toolProgress: true,
           label: "Working",
         },
       },
@@ -689,6 +697,7 @@ describe("createMSTeamsReplyDispatcher", () => {
       streaming: {
         mode: "progress",
         progress: {
+          toolProgress: true,
           label: "Working",
         },
       },

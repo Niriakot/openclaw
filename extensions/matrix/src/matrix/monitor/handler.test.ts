@@ -3417,7 +3417,7 @@ describe("matrix monitor handler draft streaming", () => {
         streaming: "progress",
         previewToolProgressEnabled: true,
         accountConfig: {
-          streaming: { mode: "progress", progress: { label: false } },
+          streaming: { mode: "progress", progress: { toolProgress: true, label: false } },
         } as never,
       });
       const streaming = await dispatch();
@@ -3464,6 +3464,7 @@ describe("matrix monitor handler draft streaming", () => {
         streaming: {
           mode: "progress",
           progress: {
+            toolProgress: true,
             label: "Pearling",
             maxLines: 1,
           },
@@ -3492,7 +3493,7 @@ describe("matrix monitor handler draft streaming", () => {
       accountConfig: {
         streaming: {
           mode: "progress",
-          progress: { label: false, maxLineChars: 500 },
+          progress: { toolProgress: true, label: false, maxLineChars: 500 },
         },
       } as never,
     });
@@ -3535,7 +3536,7 @@ describe("matrix monitor handler draft streaming", () => {
       streaming: "progress",
       previewToolProgressEnabled: true,
       accountConfig: {
-        streaming: { mode: "progress", progress: { label: "Working" } },
+        streaming: { mode: "progress", progress: { toolProgress: true, label: "Working" } },
       } as never,
     });
     const { opts, finish } = await dispatch();
@@ -3593,7 +3594,7 @@ describe("matrix monitor handler draft streaming", () => {
       streaming: "progress",
       previewToolProgressEnabled: true,
       accountConfig: {
-        streaming: { mode: "progress", progress: { label: "Working" } },
+        streaming: { mode: "progress", progress: { toolProgress: true, label: "Working" } },
       } as never,
     });
     const { opts, finish } = await dispatch();
@@ -3652,7 +3653,7 @@ describe("matrix monitor handler draft streaming", () => {
       streaming: "progress",
       previewToolProgressEnabled: true,
       accountConfig: {
-        streaming: { mode: "progress", progress: { label: "Working" } },
+        streaming: { mode: "progress", progress: { toolProgress: true, label: "Working" } },
       } as never,
     });
     const { opts, finish } = await dispatch();
@@ -4549,6 +4550,7 @@ describe("matrix monitor handler draft streaming", () => {
     try {
       const { dispatch } = createStreamingHarness({
         streaming: "progress",
+        accountConfig: { streaming: { mode: "progress", progress: { toolProgress: true } } },
         previewToolProgressEnabled: true,
       });
       const { deliver, opts, finish } = await dispatch();

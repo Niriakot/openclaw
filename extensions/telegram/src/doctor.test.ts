@@ -624,6 +624,7 @@ describe("telegram doctor", () => {
       channels: {
         telegram: {
           replyToMode: "first",
+          streaming: { progress: { toolProgress: true } },
         },
       },
     } as unknown as OpenClawConfig;
@@ -632,7 +633,7 @@ describe("telegram doctor", () => {
     expect(warnings[0]).toContain("selected quote replies");
     expect(warnings[0]).toContain('"Working" tool-progress preview');
     expect(warnings[0]).toContain("Current-message replies without selected quote text");
-    expect(warnings[1]).toContain("streaming.preview.toolProgress: false");
+    expect(warnings[1]).toContain("streaming.progress.toolProgress: false");
   });
 
   it("warns for the implicit default Telegram account when accounts is empty", async () => {
@@ -640,6 +641,7 @@ describe("telegram doctor", () => {
       channels: {
         telegram: {
           replyToMode: "all",
+          streaming: { progress: { toolProgress: true } },
           accounts: {},
         },
       },
@@ -656,6 +658,7 @@ describe("telegram doctor", () => {
       channels: {
         telegram: {
           replyToMode: "batched",
+          streaming: { progress: { toolProgress: true } },
           accounts: {
             work: {},
             quiet: {

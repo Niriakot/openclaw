@@ -353,7 +353,7 @@ describe("progress narration", () => {
     ]);
     expect(
       formatChannelProgressDraftText({
-        entry: { streaming: { mode: "progress", progress: { label: false } } },
+        entry: { streaming: { mode: "progress", progress: { toolProgress: true, label: false } } },
         lines: ["🛠️ Exec"],
         narration: "Working through the plan.",
         plan,
@@ -394,7 +394,10 @@ describe("progress narration", () => {
     expect(
       formatChannelProgressDraftText({
         entry: {
-          streaming: { mode: "progress", progress: { label: false, maxLines: 3 } },
+          streaming: {
+            mode: "progress",
+            progress: { toolProgress: true, label: false, maxLines: 3 },
+          },
         },
         lines: ["tool one", "tool two", "tool three"],
         plan: [
@@ -409,7 +412,10 @@ describe("progress narration", () => {
     expect(
       formatChannelProgressDraftText({
         entry: {
-          streaming: { mode: "progress", progress: { label: false, maxLines: 2 } },
+          streaming: {
+            mode: "progress",
+            progress: { toolProgress: true, label: false, maxLines: 2 },
+          },
         },
         lines: ["tool one", "tool two"],
         plan: [
@@ -422,7 +428,7 @@ describe("progress narration", () => {
 
   it("omits the implicit progress label when narration is available", () => {
     const text = formatChannelProgressDraftText({
-      entry: { streaming: { mode: "progress" } },
+      entry: { streaming: { mode: "progress", progress: { toolProgress: true } } },
       lines: ["🛠️ Exec"],
       narration: "Counting lines in the workspace files.",
     });
@@ -435,7 +441,7 @@ describe("progress narration", () => {
       entry: {
         streaming: {
           mode: "progress",
-          progress: { label: "auto", labels: ["Clawing"] },
+          progress: { toolProgress: true, label: "auto", labels: ["Clawing"] },
         },
       },
       lines: ["🛠️ Exec"],
@@ -447,7 +453,9 @@ describe("progress narration", () => {
 
   it("keeps tool lines visible under the narration headline", () => {
     const text = formatChannelProgressDraftText({
-      entry: { streaming: { mode: "progress", progress: { label: "Shelling" } } },
+      entry: {
+        streaming: { mode: "progress", progress: { toolProgress: true, label: "Shelling" } },
+      },
       lines: ["🛠️ Exec", "🛠️ Wc"],
       narration: "Counting lines in the workspace files.",
     });
@@ -457,7 +465,7 @@ describe("progress narration", () => {
 
   it("renders the narration headline alone when no work lines exist yet", () => {
     const text = formatChannelProgressDraftText({
-      entry: { streaming: { mode: "progress", progress: { label: false } } },
+      entry: { streaming: { mode: "progress", progress: { toolProgress: true, label: false } } },
       lines: [],
       narration: "Counting lines in the workspace files.",
     });
@@ -468,7 +476,7 @@ describe("progress narration", () => {
   it("compacts narration at a word boundary instead of line width", () => {
     const narration = Array.from({ length: 60 }, (_value, index) => `word${index}`).join(" ");
     const text = formatChannelProgressDraftText({
-      entry: { streaming: { mode: "progress", progress: { label: false } } },
+      entry: { streaming: { mode: "progress", progress: { toolProgress: true, label: false } } },
       lines: [],
       narration,
     });
@@ -486,7 +494,7 @@ describe("progress narration", () => {
     expect(resolveChannelStreamingProgressCommentary(entry, false, "partial")).toBe(false);
     expect(
       resolveChannelStreamingProgressCommentary(
-        { streaming: { mode: "progress", progress: { commentary: true } } },
+        { streaming: { mode: "progress", progress: { toolProgress: true, commentary: true } } },
         false,
       ),
     ).toBe(true);
@@ -495,12 +503,14 @@ describe("progress narration", () => {
   it("resolves the narration toggle with default on", () => {
     // Mode gating is the caller's job; unset config keeps narration available.
     expect(resolveChannelStreamingProgressNarration(undefined)).toBe(true);
-    expect(resolveChannelStreamingProgressNarration({ streaming: { mode: "progress" } })).toBe(
-      true,
-    );
     expect(
       resolveChannelStreamingProgressNarration({
-        streaming: { mode: "progress", progress: { narration: false } },
+        streaming: { mode: "progress", progress: { toolProgress: true } },
+      }),
+    ).toBe(true);
+    expect(
+      resolveChannelStreamingProgressNarration({
+        streaming: { mode: "progress", progress: { toolProgress: true, narration: false } },
       }),
     ).toBe(false);
   });

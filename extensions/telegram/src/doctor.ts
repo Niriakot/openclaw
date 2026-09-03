@@ -243,7 +243,6 @@ function scanTelegramSelectedQuoteToolProgressWarnings(
       blockStreamingEnabled ||
       !resolveChannelStreamingPreviewToolProgress(
         account,
-        true,
         resolveTelegramPreviewStreamMode(account),
       )
     ) {
@@ -267,7 +266,7 @@ function collectTelegramSelectedQuoteToolProgressWarnings(params: {
   const sample = params.hits[0] ?? { path: "channels.telegram", replyToMode: "first" };
   return [
     `- ${sanitizeForLog(sample.path)} has replyToMode: "${sanitizeForLog(sample.replyToMode)}" while Telegram preview tool-progress is enabled. Telegram selected quote replies must send the final answer through the native quote-reply path, so those turns skip the short "Working" tool-progress preview. Current-message replies without selected quote text still keep preview streaming.`,
-    '- Set replyToMode: "off" when tool-progress preview matters more than native quote replies, or set streaming.preview.toolProgress: false to keep quote replies and silence this warning.',
+    '- Set replyToMode: "off" when tool-progress preview matters more than native quote replies, or set streaming.progress.toolProgress: false to keep quote replies and silence this warning.',
   ];
 }
 

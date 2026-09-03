@@ -92,7 +92,7 @@ export function createTeamsReplyStreamController(params: {
     (streamMode === "partial" || streamMode === "progress");
   const shouldStreamPreviewToolProgress =
     streamMode === "progress" &&
-    resolveChannelStreamingPreviewToolProgress(params.msteamsConfig, true, streamMode);
+    resolveChannelStreamingPreviewToolProgress(params.msteamsConfig, streamMode);
 
   const stream = shouldUseNativeStream ? params.context.stream : undefined;
 

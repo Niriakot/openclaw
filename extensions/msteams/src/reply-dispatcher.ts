@@ -549,7 +549,6 @@ export function createMSTeamsReplyDispatcher(params: {
   // no-ops on the controller side.
   const previewToolProgressEnabled = resolveChannelStreamingPreviewToolProgress(
     msteamsCfg,
-    true,
     teamsStreamMode,
   );
   const suppressDefaultToolProgressMessages =
