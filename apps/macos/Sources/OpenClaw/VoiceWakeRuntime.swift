@@ -422,13 +422,15 @@ actor VoiceWakeRuntime {
     {
         guard generation == self.recognitionGeneration, config == self.currentConfig else { return }
         if self.isCapturing {
+            // Invalidation must resolve through the active overlay: forwarding is visibly shown
+            // as sending, and an empty interrupted command is visibly dismissed rather than sent.
             self.logger.warning("voicewake \(reason); finalizing interrupted capture")
             await self.finalizeCapture(config: config)
             return
         }
         self.logger.warning("voicewake \(reason); scheduling capture restart")
         self.haltRecognitionPipeline()
-        self.scheduleRestartRecognizer(delay: 0.7)
+        self.scheduleRestartRecognizer()
     }
 
     private func maybeLogRecognition(

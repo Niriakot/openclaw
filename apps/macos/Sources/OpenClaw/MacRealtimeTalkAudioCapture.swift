@@ -276,7 +276,7 @@ final class MacRealtimeTalkAudioCapture: RealtimeTalkAudioCapturing {
     }
 
     private func audioInputDevicesDidChange() {
-        guard let targetSampleRate, let onAudio else { return }
+        guard self.targetSampleRate != nil, self.onAudio != nil else { return }
         let desiredResolution = AudioInputDeviceObserver.resolveSelection(self.selectedInputUID())
         guard desiredResolution != self.activeInputResolution ||
             self.activeInputResolution?.shouldRestart(
@@ -285,16 +285,15 @@ final class MacRealtimeTalkAudioCapture: RealtimeTalkAudioCapturing {
         else { return }
 
         self.logger.warning("realtime active/default input changed; restarting capture")
-        self.restartCaptureAfterInputChange {
-            try self.startCaptureEngine(targetSampleRate: targetSampleRate, onAudio: onAudio)
-        }
+        self.restartCapture()
     }
 
-    private func restartCaptureAfterInputChange(_ restart: () throws -> Void) {
+    private func restartCapture() {
+        guard let targetSampleRate, let onAudio else { return }
         self.deliveryGate.deactivate()
         self.teardownEngine()
         do {
-            try restart()
+            try self.startCaptureEngine(targetSampleRate: targetSampleRate, onAudio: onAudio)
         } catch {
             self.logger.error(
                 "realtime input restart failed: \(error.localizedDescription, privacy: .public)")
@@ -307,14 +306,9 @@ final class MacRealtimeTalkAudioCapture: RealtimeTalkAudioCapturing {
     }
 
     private func audioCaptureDidInvalidate(generation: UInt64) {
-        guard generation == self.captureGeneration,
-              let targetSampleRate,
-              let onAudio
-        else { return }
+        guard generation == self.captureGeneration else { return }
         self.logger.warning("realtime audio capture invalidated; restarting")
-        self.restartCaptureAfterInputChange {
-            try self.startCaptureEngine(targetSampleRate: targetSampleRate, onAudio: onAudio)
-        }
+        self.restartCapture()
     }
 
     private func teardownEngine() {
